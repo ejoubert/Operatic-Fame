@@ -10,12 +10,11 @@
       ["", "^", "~", "~", "", "", "", "^", "", ""],
       ["", "^", "", "~", "~", "", "", "", "", ""],
       ["", "^", "", "", "~", "~", "", "", "", ""],
-
-    ];
+      ];
 
 //Determines grid size
 function gridSize(){
-	return `${GRID[0].length} x ${GRID.length}`;
+  return `${GRID[0].length} x ${GRID.length}`;
 }
 
 //Determines area of grid
@@ -25,20 +24,14 @@ function totalCells(){
 
 //Determines a cell's content at a specific coordinate
 function lightCell(light){
-	let x = light.substring(0); //Seperates number from entry string
-	let y = light.substring(1); //Seperates letter from entry string
-	let letterCell = x.charCodeAt() - 65; //Converts letter into corresponding number in grid
-	return GRID[letterCell][y-1];
+  return GRID[convertLetter(light)][convertNumber(light)];
 }
 
 //Determines whether there is a rock at a specific coordinate. Returns true|false
 function isRock(rock){
-  let x = rock.substring(0); //Seperates number from entry string
-  let y = rock.substring(1); //Seperates letter from entry string
-  letterCell = x.charCodeAt() - 65; //Converts letter into corresponding number in grid
   
   //Determines whether selected cell is occupied with a rock
-  if (GRID[letterCell][y-1] ==="^") {
+  if (GRID[convertLetter(rock)][convertNumber(rock)] ==="^") {
     return true;
   }else{
     return false;
@@ -47,12 +40,9 @@ function isRock(rock){
 
 //Determines whether there is a strong current at a specific coordinate. Returns true\false
 function isCurrent(current){
-  let x = current.substring(0); //Seperates number from entry string
-  let y = current.substring(1); //Seperates letter from entry string
-  let letterCell = x.charCodeAt() - 65; //Converts letter into corresponding number in grid
-  
+    
   //Determines whether selected cell is occupied with strong current
-  if (GRID[letterCell][y-1] ==="~") {
+  if (GRID[convertLetter(current)][convertNumber(current)] ==="~") {
     return true;
   }else{
     return false;
@@ -67,13 +57,22 @@ function lightRow(row){
 //Returns contents of chosen column
 function lightColumn(column){
   let array = []
-  let letterCell = (column.charCodeAt() - 65); //Converts letter to corresponding number in grid
-  for (var i = 0; i < GRID[letterCell].length; i++) {
+  for (var i = 0; i < GRID[convertLetter(column)].length; i++) {
     
     //Pushes i's value of grid to new array on each row pass
-    array.push(GRID[i][letterCell])
+    array.push(GRID[i][convertLetter(column)-2])
   }
   return array
+}
+
+function convertLetter(input){
+  let letter = input.substring(0);
+  let letterConvert = (letter.charCodeAt() - 65) + 1;
+  return letterConvert + 1
+}
+function convertNumber(input){
+  let numberConvert = input.substring(1);
+  return numberConvert
 }
 
 //Specifies grid cells passed to other functions
@@ -83,7 +82,7 @@ let currentCheck = "E2"
 let rowLight = 9
 let columnLight = "E"
 
- 
+ console.log(convertLetter('D1'))
 //Logs grid size, area, and contents of a specific cell 
 console.log(`The grid is ${gridSize()} with a total of ${totalCells()} cells. The current cell contains "${lightCell(chosenCell)}"`)
 
